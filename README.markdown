@@ -25,15 +25,18 @@ Plugin 'wfleming/vim-codeclimate'
 ## Usage
 
 ```
+:CodeClimateAnalyzeProject
+:CodeClimateAnalyzeOpenFiles
 :CodeClimateAnalyzeCurrentFile
 ```
 
-Currently this plugin has one command which analyzes the file in the current buffer.
-
-By default, this command isn't mapped to any shortcuts to avoid interfering with other plugins, but you can easily add one in your `.vimrc` or `init.vim`:
+The plugin exposes the three commands above.
+By default, no shortcuts are bound to these commands to avoid interfering with other plugins, but you can easily add some in your `.vimrc` or `init.vim`:
 
 ```
-nmap <Leader>a :CodeClimateAnalyzeCurrentFile<CR>
+nmap <Leader>aa :CodeClimateAnalyzeProject<CR>
+nmap <Leader>ao :CodeClimateAnalyzeOpenFiles<CR>
+nmap <Leader>af :CodeClimateAnalyzeCurrentFile<CR>
 ```
 
 ### Keyboard Shortcuts
