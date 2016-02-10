@@ -47,7 +47,7 @@ function! s:EligibleBuffers()
   let l:bufs = []
   let l:idx = bufnr('^')
   while l:idx <= bufnr('$')
-    if '' ==# getbufvar(l:idx, '&buftype')
+    if '' ==# getbufvar(l:idx, '&buftype') && filereadable(expand('#'.l:idx.':p'))
       call add(l:bufs, l:idx)
     endif
     let l:idx = l:idx + 1
@@ -79,9 +79,13 @@ endfunction
 
 function! s:RunAnalysis(files)
   echo 'Running codeclimate analyze...'
-  let l:analyze_output = system(g:vimcodeclimate_analyze_cmd.' '.a:files)
+  let l:analyze_cmd = g:vimcodeclimate_analyze_cmd.' '.a:files
+  let l:analyze_output = system(l:analyze_cmd)
   if v:shell_error
-    echohl ErrorMsg | echo 'codeclimate failed: try `codeclimate validate-config` or `codeclimate analyze` in your shell.' |  echohl None
+    echohl ErrorMsg
+    echo 'codeclimate failed: try `codeclimate validate-config` or `codeclimate analyze` in your shell.'
+    echo 'failed command: '.l:analyze_cmd
+    echohl None
     return
   endif
   let l:issues = []
