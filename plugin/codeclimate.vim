@@ -32,7 +32,7 @@ function! s:AnalyzeOpenFiles()
 
   let l:files = s:BufferNames(l:bufs)
 
-  call s:RunAnalysis(join(l:files, ' '))
+  call s:RunAnalysis(join(map(l:files, 'shellescape(v:val)'), ' '))
 endfunction
 
 function! s:AnalyzeCurrentFile()
@@ -40,7 +40,7 @@ function! s:AnalyzeCurrentFile()
     call s:ModifiedFilesWarning()
   endif
 
-  call s:RunAnalysis(@%)
+  call s:RunAnalysis(shellescape(@%))
 endfunction
 
 function! s:EligibleBuffers()
