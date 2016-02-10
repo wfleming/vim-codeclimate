@@ -79,9 +79,13 @@ endfunction
 
 function! s:RunAnalysis(files)
   echo 'Running codeclimate analyze...'
-  let l:analyze_output = system(g:vimcodeclimate_analyze_cmd.' '.a:files)
+  let l:analyze_cmd = g:vimcodeclimate_analyze_cmd.' '.a:files
+  let l:analyze_output = system(l:analyze_cmd)
   if v:shell_error
-    echohl ErrorMsg | echo 'codeclimate failed: try `codeclimate validate-config` or `codeclimate analyze` in your shell.' |  echohl None
+    echohl ErrorMsg
+    echo 'codeclimate failed: try `codeclimate validate-config` or `codeclimate analyze` in your shell.'
+    echo 'failed command: '.l:analyze_cmd
+    echohl None
     return
   endif
   let l:issues = []
