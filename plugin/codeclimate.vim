@@ -47,7 +47,7 @@ function! s:EligibleBuffers()
   let l:bufs = []
   let l:idx = bufnr('^')
   while l:idx <= bufnr('$')
-    if '' ==# getbufvar(l:idx, '&buftype')
+    if '' ==# getbufvar(l:idx, '&buftype') && filereadable(expand('#'.l:idx.':p'))
       call add(l:bufs, l:idx)
     endif
     let l:idx = l:idx + 1
