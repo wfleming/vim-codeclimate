@@ -1,5 +1,7 @@
 # vim-codeclimate
 
+[![Code Climate](https://codeclimate.com/github/wfleming/vim-codeclimate/badges/gpa.svg)](https://codeclimate.com/github/wfleming/vim-codeclimate)
+
 A vim plugin that runs the [Code Climate CLI][cli] & displays the results in vim.
 
 ![Demo gif](https://github.com/wfleming/vim-codeclimate/wiki/images/demo.gif)
