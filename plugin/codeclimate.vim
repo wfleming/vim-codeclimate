@@ -57,9 +57,13 @@ endfunction
 
 function! s:BufferNames(buffers)
   let l:names = []
+  let l:cwd = getcwd()
   for l:idx in a:buffers
-    let l:bufName = expand('#'.l:idx.':p:t')
-    call add(l:names, l:bufName)
+    let l:fullPath = expand('#'.l:idx.':p')
+    if 0 == stridx(l:fullPath, l:cwd)
+      let l:relPath = strpart(l:fullPath, strlen(l:cwd) + 1)
+      call add(l:names, l:relPath)
+    endif
   endfor
   return l:names
 endfunction
