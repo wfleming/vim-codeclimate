@@ -98,8 +98,8 @@ function! s:RunAnalysis(files)
   for l:line in split(l:analyze_output, "\n")
     if 0 == stridx(l:line, '== ')
       let l:currentFile = substitute(l:line, '^== \(.\+\) (.\+==$', '\1', 'i')
-    elseif matchstr(l:line, '^\d\+-\=\d\+\:')
-      let l:lineNumber = substitute(l:line, '^\(\d\+\)\(\-\=\d\+\)\(\:.*\)', '\1\3', 'g')
+    elseif matchstr(l:line, '^\d\+[-=]\d\+\:')
+      let l:lineNumber = substitute(l:line, '^\(\d\+\)\([-=]\d\+\)\(\:.*\)', '\1\3', 'g')
       call add(l:issues, l:currentFile.':'.l:lineNumber)
     endif
   endfor
