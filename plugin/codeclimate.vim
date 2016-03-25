@@ -106,9 +106,9 @@ function! s:ParseIssues(text)
   let l:lineNumber = ''
   for l:line in split(a:text, "\n")
     if 0 == stridx(l:line, '== ')
-      let l:currentFile = substitute(l:line, '^== \(.\+\) (.\+==$', '\1', 'i')
-    elseif matchstr(l:line, '^\d\+-\=\d\+\:')
-      let l:lineNumber = substitute(l:line, '^\(\d\+\)\([-=]\d\+\)\(\:.*\)', '\1\3', 'g')
+      let l:currentFile = substitute(l:line, '\v^\=\= (.+) \(.+\=\=$', '\1', 'i')
+    elseif matchstr(l:line, '\v^\d+(-\d+)?:')
+      let l:lineNumber = substitute(l:line, '\v^(\d+)(-\d+)(:.*)', '\1\3', 'g')
       call add(l:issues, l:currentFile.':'.l:lineNumber)
     endif
   endfor
