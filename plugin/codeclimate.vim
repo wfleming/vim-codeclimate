@@ -92,22 +92,27 @@ function! s:RunAnalysis(files)
     echohl None
     return
   endif
-  let l:issues = []
-  let l:currentFile = ''
-  let l:lineNumber = ''
-  for l:line in split(l:analyze_output, "\n")
-    if 0 == stridx(l:line, '== ')
-      let l:currentFile = substitute(l:line, '^== \(.\+\) (.\+==$', '\1', 'i')
-    elseif matchstr(l:line, '^\d\+-\=\d\+\:')
-      let l:lineNumber = substitute(l:line, '^\(\d\+\)\([-=]\d\+\)\(\:.*\)', '\1\3', 'g')
-      call add(l:issues, l:currentFile.':'.l:lineNumber)
-    endif
-  endfor
+  let l:issues = s:ParseIssues(l:analyze_output)
   if 0 == len(l:issues)
     echo 'Code Climate found no issues! Well done.'
   else
     call s:ShowIssues(l:issues)
   endif
+endfunction
+
+function! s:ParseIssues(text)
+  let l:issues = []
+  let l:currentFile = ''
+  let l:lineNumber = ''
+  for l:line in split(a:text, "\n")
+    if 0 == stridx(l:line, '== ')
+      let l:currentFile = substitute(l:line, '\v^\=\= (.+) \(.+\=\=$', '\1', 'i')
+    elseif matchstr(l:line, '\v^\d+(-\d+)?:')
+      let l:lineNumber = substitute(l:line, '\v^(\d+)(-\d+)(:.*)', '\1\3', 'g')
+      call add(l:issues, l:currentFile.':'.l:lineNumber)
+    endif
+  endfor
+  return l:issues
 endfunction
 
 function! s:ShowIssues(issues)
@@ -146,6 +151,11 @@ function! s:QuickHelp()
 
   nnoremap <silent> <buffer> ? :q!<CR>:copen<CR>:call <SID>BindQuickShortcuts()<CR>
 endfunction
+
+function! codeclimate#sid()
+  return maparg('<SID>', 'n')
+endfunction
+nnoremap <SID>  <SID>
 
 command! CodeClimateAnalyzeProject :call <SID>AnalyzeProject()
 command! CodeClimateAnalyzeOpenFiles :call <SID>AnalyzeOpenFiles()

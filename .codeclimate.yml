@@ -7,4 +7,5 @@ engines:
 ratings:
   paths:
     - "**/*.vim"
-exclude_paths: []
+exclude_paths:
+  - t/
