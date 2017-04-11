@@ -16,6 +16,8 @@ if !exists('g:vimcodeclimate_analyze_cmd')
   let g:vimcodeclimate_analyze_cmd = 'codeclimate analyze'
 endif
 
+let s:BUF_OPT_VAR = 'codeclimateflags'
+
 function! s:AnalyzeProject()
   if s:AnyBufferModified(s:EligibleBuffers())
     call s:ModifiedFilesWarning()
@@ -30,9 +32,11 @@ function! s:AnalyzeOpenFiles()
     call s:ModifiedFilesWarning()
   endif
 
+  let l:extraopts = s:BufferAnalysisOpts(l:bufs)
   let l:files = s:BufferNames(l:bufs)
+  let l:cli = join(l:extraopts, ' ') . ' ' . join(map(l:files, 'shellescape(v:val)'), ' ')
 
-  call s:RunAnalysis(join(map(l:files, 'shellescape(v:val)'), ' '))
+  call s:RunAnalysis(l:cli)
 endfunction
 
 function! s:AnalyzeCurrentFile()
@@ -40,7 +44,9 @@ function! s:AnalyzeCurrentFile()
     call s:ModifiedFilesWarning()
   endif
 
-  call s:RunAnalysis(shellescape(@%))
+  let l:cli = getbufvar(@%, s:BUF_OPT_VAR) . ' ' . shellescape(@%)
+
+  call s:RunAnalysis(l:cli)
 endfunction
 
 function! s:EligibleBuffers()
@@ -53,6 +59,17 @@ function! s:EligibleBuffers()
     let l:idx = l:idx + 1
   endwhile
   return l:bufs
+endfunction
+
+function! s:BufferAnalysisOpts(buffers)
+  let l:opts = []
+  for l:idx in a:buffers
+    let l:opt = getbufvar(l:idx, s:BUF_OPT_VAR)
+    if '' !=# l:opt
+      call add(l:opts, l:opt)
+    endif
+  endfor
+  return l:opts
 endfunction
 
 function! s:BufferNames(buffers)

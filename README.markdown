@@ -41,6 +41,19 @@ nmap <Leader>ao :CodeClimateAnalyzeOpenFiles<CR>
 nmap <Leader>af :CodeClimateAnalyzeCurrentFile<CR>
 ```
 
+### Variables
+
+`CodeClimateAnalyzeOpenFiles` & `CodeClimateAnalyzeCurrentFile` will both look for buffer-level `b:codeclimateflags` variables in the buffers they'll analyze, and include those in the invocation of the Code Climate CLI.
+
+For example, in a large web project you're likely to have many different engines enabled (to cover your backend, styles, front-end, etc.), but for any given file you're editing most of those engines are probably not applicable.
+By using `autocmd`, you can declare which engines you want run for specific filetypes, which can help analysis run noticeably faster. As a concrete example, I use the following configuration for a Ruby on Rails project:
+
+```
+autocmd FileType javascript let b:codeclimateflags="--engine eslint"
+autocmd FileType ruby let b:codeclimateflags="--engine rubocop"
+autocmd FileType scss let b:codeclimateflags="--engine scss-lint"
+```
+
 ### Keyboard Shortcuts
 
 Keyboard Shortcuts are available in the quickfix window, borrowed from the [ack.vim][ackvim] plugin.
