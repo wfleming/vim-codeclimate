@@ -2,7 +2,7 @@
 "
 " Author:    Will Fleming
 " URL:       https://github.com/wfleming/vim-codeclimate
-" Version:   0.1
+" Version:   0.2.0
 " Copyright: Copyright (c) 2016 Will Fleming
 " License:   MIT
 " ----------------------------------------------------------------------------
